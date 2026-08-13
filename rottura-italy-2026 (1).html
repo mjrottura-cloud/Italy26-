@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rottura Italy · August 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF8F1;
+    --paper-2:#F4EEE1;
+    --card:#FFFFFF;
+    --ink:#233038;
+    --ink-soft:#5C6B72;
+    --ink-faint:#8A969C;
+    --line:rgba(35,48,56,.12);
+    --line-soft:rgba(35,48,56,.07);
+    --sea:#15606f;
+    --sea-deep:#0e4653;
+    /* place accents — the journey changes color as it moves */
+    --florence:#A65E2B;
+    --rome:#9C7C2A;
+    --capri:#1B7C9E;
+    --positano:#C24E67;
+    --gold:#C79A3A;
+    --shadow:0 1px 2px rgba(20,40,50,.04),0 8px 26px rgba(20,40,50,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:940px;margin:0 auto;padding:0 22px}
+
+  /* ---------- sticky nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(251,248,241,.82);
+    backdrop-filter:saturate(1.2) blur(10px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  nav .wrap{display:flex;align-items:center;gap:4px;height:52px;overflow-x:auto;scrollbar-width:none}
+  nav .wrap::-webkit-scrollbar{display:none}
+  nav .brand{font-family:'Fraunces';font-weight:600;font-size:15px;letter-spacing:.2px;margin-right:auto;white-space:nowrap}
+  nav a{
+    font-size:12px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;
+    color:var(--ink-soft);text-decoration:none;padding:6px 10px;border-radius:20px;white-space:nowrap;
+    transition:color .2s,background .2s;
+  }
+  nav a:hover,nav a:focus-visible{color:var(--ink);background:var(--paper-2)}
+  nav a:focus-visible{outline:2px solid var(--sea);outline-offset:2px}
+
+  /* ---------- hero ---------- */
+  header.hero{
+    background:
+      radial-gradient(120% 90% at 78% -10%, rgba(199,154,58,.16), transparent 55%),
+      linear-gradient(160deg,var(--sea) 0%,var(--sea-deep) 100%);
+    color:#f7f3e9;padding:64px 0 54px;position:relative;overflow:hidden;
+  }
+  header.hero:before{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);
+    background-size:22px 22px;opacity:.5;
+  }
+  .hero .wrap{position:relative}
+  .eyebrow{
+    font-size:12px;letter-spacing:.28em;text-transform:uppercase;
+    color:rgba(247,243,233,.72);font-weight:600;margin-bottom:18px;
+  }
+  h1{
+    font-family:'Fraunces';font-weight:500;line-height:1.02;letter-spacing:-.01em;
+    font-size:clamp(42px,8.5vw,78px);margin-bottom:8px;
+  }
+  h1 em{font-style:italic;color:var(--gold)}
+  .hero .dates{font-family:'Fraunces';font-size:clamp(17px,2.4vw,21px);color:rgba(247,243,233,.9);font-weight:400}
+  .hero .dates span{color:var(--gold)}
+
+  /* route line */
+  .route{display:flex;align-items:center;gap:0;margin:34px 0 6px;flex-wrap:wrap}
+  .route .stop{display:flex;align-items:center;gap:9px}
+  .route .dot{width:11px;height:11px;border-radius:50%;box-shadow:0 0 0 4px rgba(255,255,255,.1)}
+  .route .name{font-size:13px;font-weight:500;letter-spacing:.02em;color:#f7f3e9}
+  .route .seg{width:26px;height:1.5px;background:rgba(247,243,233,.35);margin:0 10px}
+  @media(max-width:620px){.route .name{font-size:12px}.route .seg{width:14px;margin:0 6px}}
+
+  .travelers{margin-top:30px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .travelers .lbl{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:rgba(247,243,233,.6);margin-right:6px}
+  .chip{
+    font-size:13px;font-weight:500;padding:5px 13px;border-radius:20px;
+    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#f7f3e9;
+  }
+
+  /* ---------- section base ---------- */
+  section{padding:54px 0}
+  .sec-eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;margin-bottom:8px}
+  h2{font-family:'Fraunces';font-weight:500;font-size:clamp(26px,4vw,36px);letter-spacing:-.01em;line-height:1.1}
+
+  /* ---------- flights ---------- */
+  .flights{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
+  @media(max-width:640px){.flights{grid-template-columns:1fr}}
+  .flight{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:var(--shadow);
+  }
+  .flight .tag{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--sea);margin-bottom:14px}
+  .flight .leg{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+  .flight .ap{font-family:'Fraunces';font-size:28px;font-weight:600}
+  .flight .arrow{color:var(--ink-faint);font-size:18px}
+  .flight .times{display:flex;justify-content:space-between;margin-top:4px;font-size:13px;color:var(--ink-soft)}
+  .flight .meta{margin-top:16px;padding-top:14px;border-top:1px solid var(--line-soft);font-size:13px;color:var(--ink-soft)}
+  .flight .meta b{color:var(--ink);font-weight:600}
+  .note-inline{color:var(--positano);font-weight:500}
+
+
+  /* ---------- day by day ---------- */
+  .days{margin-top:24px;display:grid;gap:0}
+  .day{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--line-soft);align-items:flex-start}
+  .day:last-child{border-bottom:none}
+  .dnum{
+    flex:none;width:34px;height:34px;border-radius:10px;color:#fff;
+    display:grid;place-items:center;font-family:'Fraunces';font-size:15px;font-weight:600;
+  }
+  .dbody{flex:1;min-width:0}
+  .dh{font-weight:600;font-size:15px;color:var(--ink);line-height:1.3}
+  .dd{font-size:13.5px;color:var(--ink-soft);margin-top:2px}
+
+  /* ---------- city ---------- */
+  .city{position:relative;padding:44px 0 30px;border-top:1px solid var(--line-soft)}
+  .city .wrap{position:relative;padding-left:26px}
+  .city .spine{position:absolute;left:22px;top:52px;bottom:8px;width:3px;border-radius:3px}
+  @media(min-width:720px){
+    .city .wrap{padding-left:42px}
+    .city .spine{left:0;left:calc((100vw - 940px)/2 + 22px)}
+  }
+  .city-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+  .city-num{font-family:'Fraunces';font-size:13px;font-weight:600;letter-spacing:.1em;opacity:.6}
+  .city h3{font-family:'Fraunces';font-weight:600;font-size:clamp(30px,5vw,44px);line-height:1;letter-spacing:-.01em}
+  .city .when{font-size:13px;font-weight:500;color:var(--ink-soft);margin-top:8px}
+  .city .nights{
+    display:inline-block;font-size:12px;font-weight:600;letter-spacing:.04em;
+    padding:5px 12px;border-radius:20px;color:#fff;white-space:nowrap;
+  }
+
+  .block{margin-top:22px}
+  .block-lbl{
+    display:flex;align-items:center;gap:8px;
+    font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--ink-soft);margin-bottom:12px;
+  }
+  .block-lbl:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.5}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow)}
+  .card + .card{margin-top:12px}
+  .card .title{font-family:'Fraunces';font-size:19px;font-weight:600;line-height:1.2}
+  .card .sub{font-size:13px;color:var(--ink-soft);margin-top:3px}
+  .kv{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:14px}
+  .kv div{font-size:13px}
+  .kv .k{color:var(--ink-faint);font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+  .kv .v{color:var(--ink);font-weight:500}
+  .code{font-family:'Fraunces';letter-spacing:.06em;font-weight:600}
+
+  /* activity + todo */
+  .todo{list-style:none;display:grid;gap:2px}
+  .todo li{
+    display:flex;gap:13px;padding:13px 4px;border-bottom:1px solid var(--line-soft);align-items:flex-start;
+  }
+  .todo li:last-child{border-bottom:none}
+  .todo .mark{
+    flex:none;width:22px;height:22px;border-radius:7px;margin-top:1px;
+    display:grid;place-items:center;font-size:11px;font-weight:700;color:#fff;
+  }
+  .todo .body{flex:1}
+  .todo .body .h{font-weight:600;font-size:15px;color:var(--ink)}
+  .todo .body .d{font-size:13.5px;color:var(--ink-soft);margin-top:1px}
+  .hike{
+    display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+    padding:2px 7px;border-radius:6px;margin-left:8px;vertical-align:middle;
+    background:rgba(27,124,158,.12);color:var(--capri);
+  }
+
+  .todo-num{
+    flex:none;width:22px;height:22px;border-radius:50%;margin-top:1px;
+    display:grid;place-items:center;font-family:'Fraunces';font-size:12px;font-weight:600;color:#fff;
+  }
+
+  /* transport / pending */
+  .transport{display:grid;gap:10px;margin-top:6px}
+  .tp{
+    display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;
+    border:1.5px dashed var(--line);background:rgba(255,255,255,.4);font-size:14px;
+  }
+  .tp .ic{flex:none;color:var(--ink-faint)}
+  .tp b{font-weight:600}
+  .tp .tag-todo{margin-left:auto;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);background:rgba(199,154,58,.14);padding:3px 9px;border-radius:20px;white-space:nowrap}
+
+  .flag{
+    margin-top:14px;display:flex;gap:11px;padding:0 0 0 15px;
+    border-left:2px solid var(--line);
+  }
+  .flag .ic{flex:none;color:var(--ink-faint);font-size:12px;line-height:1.9;font-weight:600}
+  .flag .body{font-size:13.5px;color:var(--ink-soft);line-height:1.62}
+  .flag .body b{color:var(--ink);font-weight:600}
+  .flag.key{border-left-color:var(--gold)}
+  .flag.key .ic{color:var(--gold)}
+
+  /* ---------- need to know ---------- */
+  .know{background:var(--sea-deep);color:#eef4f2}
+  .know h2{color:#fff}
+  .know .sec-eyebrow{color:rgba(238,244,242,.65)}
+  .know-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px}
+  @media(max-width:640px){.know-grid{grid-template-columns:1fr}}
+  .know-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:18px 20px}
+  .know-card .h{font-family:'Fraunces';font-size:17px;font-weight:600;margin-bottom:6px;color:#fff}
+  .know-card .p{font-size:13.5px;color:rgba(238,244,242,.82);line-height:1.55}
+  .know-card .p b{color:var(--gold);font-weight:600}
+
+  /* ---------- open items ---------- */
+  .open .wrap{background:var(--paper-2);border-radius:18px;padding:30px 28px;border:1px solid var(--line-soft)}
+  .open h2{font-size:24px;margin-bottom:6px}
+  .open p.intro{font-size:14px;color:var(--ink-soft);max-width:560px}
+  .open ul{list-style:none;margin-top:20px;display:grid;gap:11px}
+  .open li{display:flex;gap:12px;font-size:14.5px;align-items:flex-start}
+  .open li .box{flex:none;width:19px;height:19px;border:2px solid var(--ink-faint);border-radius:5px;margin-top:2px}
+  .open li b{font-weight:600}
+  .open li .d{color:var(--ink-soft);font-size:13.5px}
+
+  footer{padding:40px 0 60px;text-align:center;color:var(--ink-faint);font-size:12.5px}
+  footer .fr{font-family:'Fraunces';font-style:italic;font-size:15px;color:var(--ink-soft);margin-bottom:8px}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <span class="brand">Rottura · Italia '26</span>
+    <a href="#days">Days</a>
+    <a href="#florence">Florence</a>
+    <a href="#rome">Rome</a>
+    <a href="#capri">Capri</a>
+    <a href="#positano">Positano</a>
+    <a href="#know">Know</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">The Rottura Family · Five Travelers</div>
+    <h1>An Italian <em>Fortnight</em></h1>
+    <div class="dates">August <span>15</span> — <span>28</span>, 2026 · Florence · Rome · Capri · Positano</div>
+
+    <div class="route">
+      <div class="stop"><span class="dot" style="background:var(--florence)"></span><span class="name">Florence</span></div>
+      <span class="seg"></span>
+      <div class="stop"><span class="dot" style="background:var(--rome)"></span><span class="name">Rome</span></div>
+      <span class="seg"></span>
+      <div class="stop"><span class="dot" style="background:var(--capri)"></span><span class="name">Capri</span></div>
+      <span class="seg"></span>
+      <div class="stop"><span class="dot" style="background:var(--positano)"></span><span class="name">Positano</span></div>
+    </div>
+
+    <div class="travelers">
+      <span class="lbl">Travelers</span>
+      <span class="chip">Rome</span>
+      <span class="chip">Amy</span>
+      <span class="chip">Dominic</span>
+      <span class="chip">Dante</span>
+      <span class="chip">Matteo</span>
+    </div>
+  </div>
+</header>
+
+<!-- FLIGHTS -->
+<section>
+  <div class="wrap">
+    <div class="sec-eyebrow">Getting there &amp; back</div>
+    <h2>Flights</h2>
+    <div class="flights">
+      <div class="flight">
+        <div class="tag">Outbound · American 718</div>
+        <div class="leg"><span class="ap">PHL</span><span class="arrow">✈</span><span class="ap">FCO</span></div>
+        <div class="times"><span>Philadelphia</span><span>Rome</span></div>
+        <div class="meta">
+          Depart <b>Aug 15, 4:40 PM</b> → Arrive <b>Aug 16, 7:05 AM</b><br>
+          <span class="note-inline">Overnight — you land the next morning.</span> Arrival Terminal 3.
+        </div>
+      </div>
+      <div class="flight">
+        <div class="tag">Return · American 781</div>
+        <div class="leg"><span class="ap">NAP</span><span class="arrow">✈</span><span class="ap">PHL</span></div>
+        <div class="times"><span>Naples</span><span>Philadelphia</span></div>
+        <div class="meta">
+          Depart <b>Aug 28, 12:00 PM</b> → Arrive <b>Aug 28, 4:00 PM</b><br>
+          Flying home out of Naples, not Rome.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ DAY BY DAY ============ -->
+<section id="days">
+  <div class="wrap">
+    <div class="sec-eyebrow">At a glance</div>
+    <h2>Day by day</h2>
+    <p style="font-size:14px;color:var(--ink-soft);max-width:600px;margin-top:10px">Every day of the trip in one view. Full details for each are in the city sections below.</p>
+    <div class="days">
+      <div class="day"><div class="dnum" style="background:var(--sea)">15</div><div class="dbody"><div class="dh">Saturday · Fly out</div><div class="dd">Depart Philadelphia 4:40 PM — overnight to Rome</div></div></div>
+      <div class="day"><div class="dnum" style="background:var(--florence)">16</div><div class="dbody"><div class="dh">Sunday · Arrive &amp; travel to Florence</div><div class="dd">Land Rome 7:05 AM · Florence by noon · check in 4:00 PM · dinner at All'Antico Ristoro 6:00 PM</div></div></div>
+      <div class="day"><div class="dnum" style="background:var(--florence)">17</div><div class="dbody"><div class="dh">Monday · Florence</div><div class="dd">Duomo dome climb 3:00 PM</div></div></div>
+      <div class="day"><div class="dnum" style="background:var(--florence)">18</div><div class="dbody"><div class="dh">Tuesday · Tuscany</div><div class="dd">Siena &amp; San Gimignano day trip, 9:00 AM — full day</div></div></div>
+      <div class="day"><div class="dnum" style="background:var(--rome)">19</div><div class="dbody"><div class="dh">Wednesday · Florence → Rome</div><div class="dd">Train to Rome · check in 3:00 PM · golf cart night tour 6:30 PM</div></div></div>
+      <div class="day"><div class="dnum" style="background:var(--rome)">20</div><div class="dbody"><div class="dh">Thursday · Rome</div><div class="dd">Colosseum &amp; arena floor 2:30 PM · Sabatini 8:00 PM</div></div></div>
+      <div class="day"><div class="dnum" style="background:var(--rome)">21</div><div class="dbody"><div class="dh">Friday · Rome — long day</div><div class="dd">Vatican first entry 7:30 AM · Trastevere food tour 6:00 PM</div></div></div>
+      <div class="day"><div class="dnum" style="background:var(--rome)">22</div><div class="dbody"><div class="dh">Saturday · Rome</div><div class="dd">Pantheon &amp; Trevi walk 2:00 PM · pasta making class 5:30 PM</div></div></div>
+      <div class="day"><div class="dnum" style="background:var(--capri)">23</div><div class="dbody"><div class="dh">Sunday · Rome → Pompeii → Capri</div><div class="dd">Early departure · Pompeii 10:30 AM · car to Sorrento · ferry · Sciuè Sciuè</div></div></div>
+      <div class="day"><div class="dnum" style="background:var(--capri)">24</div><div class="dbody"><div class="dh">Monday · Capri</div><div class="dd">La Fontelina beach club &amp; lunch 12:30 PM · Lo Sfizio 8:00 PM</div></div></div>
+      <div class="day"><div class="dnum" style="background:var(--positano)">25</div><div class="dbody"><div class="dh">Tuesday · Capri → Ravello → Positano</div><div class="dd">Ferry to Amalfi · Ravello gardens &amp; lunch · check in · Da Vincenzo 7:45 PM</div></div></div>
+      <div class="day"><div class="dnum" style="background:var(--positano)">26</div><div class="dbody"><div class="dh">Wednesday · Amalfi Coast by boat</div><div class="dd">Private boat 9:30 AM–5:00 PM · La Tagliata shuttle 7:05 PM</div></div></div>
+      <div class="day"><div class="dnum" style="background:var(--positano)">27</div><div class="dbody"><div class="dh">Thursday · Positano — last day</div><div class="dd">Da Adolfo beach &amp; lunch 1:00 PM · Chez Black 7:00 PM · pack tonight</div></div></div>
+      <div class="day"><div class="dnum" style="background:var(--sea)">28</div><div class="dbody"><div class="dh">Friday · Fly home</div><div class="dd">Leave Positano ~7:00 AM · Naples 12:00 PM → Philadelphia 4:00 PM</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FLORENCE ============ -->
+<article class="city" id="florence">
+  <span class="spine" style="background:var(--florence)"></span>
+  <div class="wrap">
+    <div class="city-head">
+      <div>
+        <div class="city-num" style="color:var(--florence)">STOP 01</div>
+        <h3 style="color:var(--florence)">Florence</h3>
+        <div class="when">Aug 16 → 19 · Renaissance in the heart of Tuscany</div>
+      </div>
+      <span class="nights" style="background:var(--florence)">3 nights</span>
+    </div>
+
+    <div class="block">
+      <div class="block-lbl" style="color:var(--florence)">Where you're staying</div>
+      <div class="card">
+        <div class="title">Vacation Home · hosted by Donatella</div>
+        <div class="sub">Corso dei Tintori 6, 50122 Firenze — steps from Santa Croce</div>
+        <div class="kv">
+          <div><div class="k">Check-in</div><div class="v">Aug 16, after 4:00 PM</div></div>
+          <div><div class="k">Check-out</div><div class="v">Aug 19</div></div>
+          <div><div class="k">Confirmation</div><div class="v code">HMNPBASM3B</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-lbl" style="color:var(--florence)">Booked</div>
+      <div class="card">
+        <div class="title">Dinner at All'Antico Ristoro</div>
+        <div class="sub">Florence · arrival evening</div>
+        <div class="kv">
+          <div><div class="k">Date</div><div class="v">Sun, Aug 16, 6:00 PM</div></div>
+        </div>
+        <div class="flag">
+          <span class="ic">—</span>
+          <div class="body">You're in Florence at noon but check-in isn't until 4:00 PM, so plan bag storage and a lunch spot. Dinner at 6:00 after a red-eye is smart — early night, and you reset on local time.
+          <br><br>
+          <span style="color:var(--ink-soft)">Worth double-checking the exact restaurant name and that a reservation exists for five — several Florence places have similar names.</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title">Climb the Dome — Florence Duomo Tour</div>
+        <div class="sub">Viator · VIP Dome Climb (max 8) · English · ~3 hours · 5 adults</div>
+        <div class="kv">
+          <div><div class="k">Date</div><div class="v">Mon, Aug 17, 3:00 PM</div></div>
+          <div><div class="k">Meet</div><div class="v">Lindt shop, 15R Piazza del Duomo (left side of the cathedral, guide w/ orange flag)</div></div>
+          <div><div class="k">Reference</div><div class="v code">1420015957</div></div>
+        </div>
+        <div class="flag">
+          <span class="ic">—</span>
+          <div class="body"><b>Confirmed on the 17th.</b> Originally booked for the 20th and moved — verified in the Viator app. It now falls while you're actually staying in Florence.
+          <br><br>
+          Meeting point: the Lindt Chocolate Shop Firenze Duomo, 15R Piazza del Duomo, on the left side of the cathedral — the guide holds an orange flag. Cathedral and crypt are self-guided and redeemable anytime within 3 days, so you can use those on the 16th or 18th. The guide hands you the physical ticket at the <em>end</em> of the tour — don't walk off without it. Gratuities aren't included.
+          <br><br>
+          <span style="color:var(--ink-soft)">Reference 1420015957 is unchanged from the original booking — the tour was moved, not rebooked, so there's no duplicate to chase.</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title">Siena &amp; San Gimignano — Exclusive Tuscany Day Trip</div>
+        <div class="sub">Full day out of Florence · 2 adults, 3 students</div>
+        <div class="kv">
+          <div><div class="k">Date</div><div class="v">Tue, Aug 18, 9:00 AM</div></div>
+        </div>
+        <div class="flag">
+          <span class="ic">—</span>
+          <div class="body"><b>A 9:00 AM start means an early morning.</b> This takes the whole of your last full day in Florence, so anything on the Florence list you care about — Piazzale Michelangelo, the Uffizi, the Accademia — needs to happen on the 16th or around the Duomo tour on the 17th. Confirm the pickup point and whether hotel pickup is included.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-lbl" style="color:var(--florence)">If you've got time</div>
+      <ul class="todo">
+        <li>
+          <span class="mark" style="background:var(--florence)">◔</span>
+          <div class="body"><div class="h">Piazzale Michelangelo → San Miniato al Monte</div>
+          <div class="d">The classic panorama over the city and Duomo, best near sunset. Keep climbing to San Miniato — one of Florence's oldest churches, better view, far fewer people. <span class="hike">easy walk up</span></div></div>
+        </li>
+        <li>
+          <span class="mark" style="background:var(--florence)">◔</span>
+          <div class="body"><div class="h">Ponte Vecchio</div>
+          <div class="d">The medieval shop-lined bridge over the Arno. Go early morning or at dusk for the photo without the crush.</div></div>
+        </li>
+        <li>
+          <span class="mark" style="background:var(--florence)">◔</span>
+          <div class="body"><div class="h">Uffizi Gallery &amp; the Accademia</div>
+          <div class="d">Botticelli's <em>Birth of Venus</em> at the Uffizi; Michelangelo's <em>David</em> at the Accademia. Both sell out in August — book timed entry ahead.</div></div>
+        </li>
+        <li>
+          <span class="mark" style="background:var(--florence)">◔</span>
+          <div class="body"><div class="h">Arno riverside stroll</div>
+          <div class="d">Flat and easy along the river toward Ponte San Niccolò — golden evening light on the water and hills. <span class="hike">easy</span></div></div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="block">
+      <div class="block-lbl" style="color:var(--florence)">Transport</div>
+      <div class="transport">
+        <div class="tp"><span class="ic">→</span><div><b>Aug 16 · Rome (FCO) → Florence.</b> Land 7:05 AM, in Florence by <b>12:00 noon</b>. Apartment check-in isn't until 4:00 PM — plan somewhere to stash bags and have lunch.</div><span class="tag-todo">to book</span></div>
+        <div class="tp"><span class="ic">→</span><div><b>Aug 19 · Florence → Rome by train.</b> Must land before 3:00 PM check-in, and you're out again at 6:30 PM for the golf-cart tour.</div><span class="tag-todo">to book</span></div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<!-- ============ ROME ============ -->
+<article class="city" id="rome">
+  <span class="spine" style="background:var(--rome)"></span>
+  <div class="wrap">
+    <div class="city-head">
+      <div>
+        <div class="city-num" style="color:var(--rome)">STOP 02</div>
+        <h3 style="color:var(--rome)">Rome</h3>
+        <div class="when">Aug 19 → 23 · The Eternal City, on the Tiber</div>
+      </div>
+      <span class="nights" style="background:var(--rome)">4 nights</span>
+    </div>
+
+    <div class="block">
+      <div class="block-lbl" style="color:var(--rome)">Where you're staying</div>
+      <div class="card">
+        <div class="title">Modern Luxury Penthouse with Terrace</div>
+        <div class="sub">Via dei Pettinari, 00186 Roma — by the Tiber, edge of Trastevere &amp; Campo de' Fiori</div>
+        <div class="kv">
+          <div><div class="k">Check-in</div><div class="v">Aug 19, 3:00 PM</div></div>
+          <div><div class="k">Check-out</div><div class="v">Aug 23, 10:00 AM</div></div>
+          <div><div class="k">Booked by</div><div class="v">Lax (Vrbo)</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-lbl" style="color:var(--rome)">Booked</div>
+      <div class="card">
+        <div class="title">Private Golf Cart Tour of Rome by Night, with drinks</div>
+        <div class="sub">Private · 2 adults, 3 students</div>
+        <div class="kv">
+          <div><div class="k">Date</div><div class="v">Wed, Aug 19, 6:30 PM</div></div>
+        </div>
+        <div class="flag">
+          <span class="ic">—</span>
+          <div class="body"><b>Same day you arrive from Florence.</b> Check-in is 3:00 PM and this starts at 6:30 — comfortable, but only if the Florence train is a late-morning or midday one. Book that leg with this in mind.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title">Colosseum &amp; Ancient Rome, with arena floor access</div>
+        <div class="sub">Semi-private · 2 adults, 3 students</div>
+        <div class="kv">
+          <div><div class="k">Date</div><div class="v">Thu, Aug 20, 2:30 PM</div></div>
+        </div>
+        <div class="flag">
+          <span class="ic">—</span>
+          <div class="body"><b>Timed entry — the ticket is the time.</b> Miss the slot and it's usually gone. Late-August afternoons at the Forum are exposed and hot; bring water and hats.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title">Dinner at Sabatini in Trastevere</div>
+        <div class="sub">Piazza S. Maria in Trastevere 13, 00153 Roma · 5 people · Tel 06/5812026 (also WhatsApp)</div>
+        <div class="kv">
+          <div><div class="k">Date</div><div class="v">Thu, Aug 20, 8:00 PM</div></div>
+          <div><div class="k">Booked as</div><div class="v">Romolo</div></div>
+        </div>
+        <div class="flag key">
+          <span class="ic">▲</span>
+          <div class="body"><b>No conflict — the food tour is on the 21st.</b> This night is yours. The Colosseum tour ends around 5:30 PM, leaving a comfortable gap before an 8:00 table, and Sabatini is a walk from the penthouse across Ponte Sisto.
+          <br><br>
+          Reservation was requested under <b>Romolo</b>. Contact if needed: <b>06/5812026</b> (also WhatsApp), weekdays 10:00–17:00.</div>
+        </div>
+        <div class="flag">
+          <span class="ic">—</span>
+          <div class="body">Sabatini is held under <b>Romolo</b>; Lo Sfizio in Capri is under <b>Rottura</b> — know which name to give at each door.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title">Vatican, Sistine Chapel &amp; St. Peter's — first entry</div>
+        <div class="sub">Semi-private · 2 adults, 3 students</div>
+        <div class="kv">
+          <div><div class="k">Date</div><div class="v">Fri, Aug 21, 7:30 AM</div></div>
+        </div>
+        <div class="flag key">
+          <span class="ic">▲</span>
+          <div class="body"><b>7:30 AM start, and you have the food tour that same evening at 6:00 PM.</b> That's a very long day — up around 6:00 AM and finishing near 10:00 PM. Build in a real rest in the afternoon between them. Also: St. Peter's enforces a dress code — <b>knees and shoulders covered for everyone</b>, no exceptions, and that catches people out in August heat.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title">Twilight Trastevere Food Tour</div>
+        <div class="sub">Viator · Eating Europe · small group · ~4 hours · 5 adults</div>
+        <div class="kv">
+          <div><div class="k">Date</div><div class="v" style="color:var(--positano)">Fri, Aug 21, 6:00 PM</div></div>
+          <div><div class="k">Reference</div><div class="v code">1417789411</div></div>
+          <div><div class="k">Booking</div><div class="v code">360991786</div></div>
+          <div><div class="k">Meet</div><div class="v">Piazza S. Bartolomeo all'Isola (monument w/ cross, on the island)</div></div>
+        </div>
+                <div class="flag">
+          <span class="ic">—</span>
+          <div class="body">Bring cash for the guide's gratuity — it isn't included. Arrive 15 minutes early; your confirmation email is the ticket, no printout needed. Use Google Maps rather than Apple Maps for the meeting point. The tour ends either on Via Roma Libera or Via dei Chiavari depending on the route.</div>
+        </div>
+        <div class="flag">
+          <span class="ic">—</span>
+          <div class="body">Good news: the meeting point is a short walk from your penthouse across Ponte Sisto.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title">Rome Walking Tour — Pantheon entry &amp; Trevi Fountain</div>
+        <div class="sub">Semi-private · 2 adults, 3 students</div>
+        <div class="kv">
+          <div><div class="k">Date</div><div class="v">Sat, Aug 22, 2:00 PM</div></div>
+        </div>
+        <div class="flag">
+          <span class="ic">—</span>
+          <div class="body">Two hours, so you finish around 4:00 PM — a comfortable gap before the cooking class at 5:30. Worth having the class address on hand so you know how far you're travelling between the two.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title">Fresh Pasta &amp; Tiramisù Cooking Class</div>
+        <div class="sub">Private experience in Rome · 2 adults, 3 students</div>
+        <div class="kv">
+          <div><div class="k">Date</div><div class="v">Sat, Aug 22, 5:30 PM</div></div>
+        </div>
+        <div class="flag">
+          <span class="ic">—</span>
+          <div class="body">Your last evening in Rome, and it doubles as dinner — don't book a table on top of it. Worth confirming the address now, since it's the one Rome booking that isn't automatically near the apartment.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-lbl" style="color:var(--rome)">If a gap opens up</div>
+      <div style="font-size:13.5px;color:var(--ink-soft);margin:-4px 0 14px;max-width:560px">Rome is booked solid — something every day, and two things on the 20th, 21st and 22nd. Treat the list below as spares for a free morning rather than a plan, and don't feel behind for skipping all of it.</div>
+      <ul class="todo">
+        <li>
+          <span class="mark" style="background:var(--rome)">◔</span>
+          <div class="body"><div class="h">Janiculum Hill (Gianicolo)</div>
+          <div class="d">Arguably the best panorama of Rome, plus the Fontana dell'Acqua Paola — and it's a walk straight up from your neighborhood. <span class="hike">walk up</span></div></div>
+        </li>
+        <li>
+          <span class="mark" style="background:var(--rome)">◔</span>
+          <div class="body"><div class="h">Vittoriano terrace (the "Wedding Cake")</div>
+          <div class="d">A glass elevator to the roof gives the only unobstructed view over the whole historic center.</div></div>
+        </li>
+        <li>
+          <span class="mark" style="background:var(--rome)">◔</span>
+          <div class="body"><div class="h">Castel Sant'Angelo — Angel's Terrace</div>
+          <div class="d">The postcard view of St. Peter's dome, especially at night.</div></div>
+        </li>
+        <li>
+          <span class="mark" style="background:var(--rome)">◔</span>
+          <div class="body"><div class="h">Basilica di San Clemente</div>
+          <div class="d">A hidden gem: a church stacked over a 4th-century church over a pagan temple — all walkable underground.</div></div>
+        </li>
+        <li>
+          <span class="mark" style="background:var(--rome)">◔</span>
+          <div class="body"><div class="h">The classics + your own backyard</div>
+          <div class="d">Colosseum + Forum + Palatine (one combo ticket), the Pantheon, Trevi — then simply get lost in Trastevere at night, right where you're staying.</div></div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="block">
+      <div class="block-lbl" style="color:var(--rome)">Transport</div>
+      <div class="transport">
+        <div class="tp"><span class="ic">→</span><div><b>Aug 23 · Rome → Pompeii → car service to Sorrento → ferry to Capri.</b> Pompeii tour ends ~1:00 PM; car to Sorrento, then the hydrofoil across.</div><span class="tag-todo">to book</span></div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<!-- ============ CAPRI ============ -->
+<article class="city" id="capri">
+  <span class="spine" style="background:var(--capri)"></span>
+  <div class="wrap">
+    <div class="city-head">
+      <div>
+        <div class="city-num" style="color:var(--capri)">STOP 03</div>
+        <h3 style="color:var(--capri)">Capri</h3>
+        <div class="when">Aug 23 → 25 · The island in the Bay of Naples</div>
+      </div>
+      <span class="nights" style="background:var(--capri)">2 nights</span>
+    </div>
+
+    <div class="block">
+      <div class="block-lbl" style="color:var(--capri)">Where you're staying</div>
+      <div class="card">
+        <div class="title">Rental Unit · hosted by Nicolò</div>
+        <div class="sub">Via Tragara 45, 80073 Capri — near the Belvedere Tragara viewpoint</div>
+        <div class="kv">
+          <div><div class="k">Dates</div><div class="v">Aug 23 → 25</div></div>
+          <div><div class="k">Guests</div><div class="v">5</div></div>
+          <div><div class="k">Confirmation</div><div class="v code">HMFTD35ETZ</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-lbl" style="color:var(--capri)">Booked</div>
+      <div class="card">
+        <div class="title">Semi-Private Tour of Pompeii</div>
+        <div class="sub">En route from Rome to Capri · 2 adults, 3 students</div>
+        <div class="kv">
+          <div><div class="k">Date</div><div class="v">Sun, Aug 23, 10:30 AM</div></div>
+        </div>
+        <div class="flag key">
+          <span class="ic">▲</span>
+          <div class="body"><b>Read this one carefully — it's the tightest day of the trip.</b> Aug 23 asks you to check out of Rome, cross to Pompeii, tour it, then get to Capri, all in one day.
+          <br><br>
+          <b>The timing:</b> Rome checkout is 10:00 AM, but the Pompeii tour starts at 10:30 AM — you cannot do both. Rome to Pompeii is roughly 2 to 2½ hours door to door (high-speed train to Naples, then the local line out to Pompeii). To make a 10:30 start you'd need to leave the penthouse around <b>6:45–7:00 AM</b> and check out early. That's allowed — you just can't linger to the 10:00 checkout.
+          <br><br>
+          <b>The luggage:</b> you'll be moving with everyone's bags. Pompeii doesn't let large luggage into the site; there's a deposit at the entrance, but it has size limits and five people's suitcases is a lot. Confirm with the tour operator how they want you to handle bags before the day arrives — this is the detail most likely to go wrong.
+          <br><br>
+          <b>After the tour:</b> you still need to reach Capri. Plan the ferry from Naples or Sorrento with real margin — an afternoon crossing, not the last one.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title">Arrival, Monte Solaro &amp; dinner at Sciuè Sciuè</div>
+        <div class="sub">Chairlift to the island's peak, then dinner — no reservation needed</div>
+        <div class="kv">
+          <div><div class="k">Date</div><div class="v">Sun, Aug 23 · afternoon &amp; evening</div></div>
+        </div>
+        <div class="flag key">
+          <span class="ic">▲</span>
+          <div class="body"><b>This is the tightest sequence of the trip — check the chairlift's last ascent.</b> Pompeii ends ~1:00 PM, then car to Sorrento, ferry to Capri, up to Via Tragara with the bags, then across to Anacapri for the lift. The Monte Solaro chairlift typically stops running late afternoon, and you'd be arriving with luggage still to drop.
+          <br><br>
+          Realistically this is a stretch goal for the 23rd. If it doesn't happen, the 25th morning before the ferry is your backup — or accept it and enjoy the arrival.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title">La Fontelina — beach club &amp; lunch</div>
+        <div class="sub">At the foot of the Faraglioni · 5 at the restaurant, 5 at the beach club</div>
+        <div class="kv">
+          <div><div class="k">Date</div><div class="v">Mon, Aug 24 · lunch 12:30 PM</div></div>
+          <div><div class="k">Club check-in</div><div class="v">9:30 AM – 1:00 PM</div></div>
+        </div>
+        <div class="flag">
+          <span class="ic">—</span>
+          <div class="body"><b>You're staying at the top of the path down to it.</b> La Fontelina sits below Punta Tragara, and your apartment is on Via Tragara — so the walk down is short but it's a steep staircase, and the climb back up in the afternoon heat is the real work. Most people take the club's boat shuttle over to Marina Piccola instead. Wear shoes you can descend stairs in, and note the swimming is off rock platforms, not sand.</div>
+        </div>
+        <div class="flag">
+          <span class="ic">—</span>
+          <div class="body"><b>This fills your only full day on Capri.</b> You arrive the 23rd and leave the 25th, so the 24th is the one complete day — beach club by day, Lo Sfizio by night (below). If Monte Solaro or the Gardens of Augustus matter to anyone, plan them for the afternoon you arrive or early on the 25th before the ferry.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title">Dinner at Lo Sfizio</div>
+        <div class="sub">Up toward Villa Jovis · confirmed under "Rottura" · 5 people</div>
+        <div class="kv">
+          <div><div class="k">Date</div><div class="v">Mon, Aug 24, 8:00 PM</div></div>
+          <div><div class="k">Address</div><div class="v">Via Tiberio 7/e, Capri</div></div>
+          <div><div class="k">Contact</div><div class="v">losfiziocapri@gmail.com</div></div>
+        </div>
+        <div class="flag">
+          <span class="ic">—</span>
+          <div class="body"><b>It's on the far, uphill side of the island from La Fontelina — leave time.</b> You'll spend the day at the beach club down by the Faraglioni, then dinner is up near Villa Jovis on the Via Tiberio side. Their directions start from Piazza Umberto I (the Piazzetta): take Via Longano under the arch between Tod's and La Parisienne to Via Sopramonte, then left at the crossway onto Via Tiberio toward Villa Jovis — keep going, don't turn onto Via Cesina, they're at n. 7/e on the left. It's a genuine walk uphill, so allow ~20–25 minutes from the Piazzetta and don't cut it fine after a full sun day.
+          <br><br>
+          <span style="color:var(--ink-soft)">Small thing: the email was addressed to "Romolo," reservation held under "Rottura" — just make sure whoever arrives gives the Rottura name.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-lbl" style="color:var(--capri)">If you've got time</div>
+      <ul class="todo">
+        <li>
+          <span class="mark" style="background:var(--capri)">◔</span>
+          <div class="body"><div class="h">Monte Solaro</div>
+          <div class="d">The island's highest point and its best 360° view. Single-seat chairlift up from Anacapri, or hike it in about an hour. <span class="hike">chairlift or ~1hr hike</span></div></div>
+        </li>
+        <li>
+          <span class="mark" style="background:var(--capri)">◔</span>
+          <div class="body"><div class="h">Gardens of Augustus</div>
+          <div class="d">One of the most photographed views on the island — over the Faraglioni sea stacks and Via Krupp's hairpin switchbacks.</div></div>
+        </li>
+        <li>
+          <span class="mark" style="background:var(--capri)">◔</span>
+          <div class="body"><div class="h">Pizzolungo Trail</div>
+          <div class="d">An easy 1–2 hour coastal walk past the Natural Arch, ending at a Faraglioni viewpoint. <span class="hike">easy · 1–2 hrs</span></div></div>
+        </li>
+        <li>
+          <span class="mark" style="background:var(--capri)">◔</span>
+          <div class="body"><div class="h">Villa Lysis</div>
+          <div class="d">A quieter, dreamy neoclassical villa with sea views — away from the Piazzetta crowds.</div></div>
+        </li>
+        <li>
+          <span class="mark" style="background:var(--capri)">◔</span>
+          <div class="body"><div class="h">Early boat tour / Blue Grotto</div>
+          <div class="d">Get on one of the first boats — Blue Grotto queues explode by mid-morning, and the island empties beautifully once day-trippers leave.</div></div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="block">
+      <div class="block-lbl" style="color:var(--capri)">Transport</div>
+      <div class="transport">
+        <div class="tp"><span class="ic">→</span><div><b>Aug 25 · Capri → Amalfi by ferry</b>, car service up to Ravello, then on to Positano. See the flag on the Ravello day — this is the trip's busiest transfer.</div><span class="tag-todo">to book</span></div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<!-- ============ POSITANO ============ -->
+<article class="city" id="positano">
+  <span class="spine" style="background:var(--positano)"></span>
+  <div class="wrap">
+    <div class="city-head">
+      <div>
+        <div class="city-num" style="color:var(--positano)">STOP 04</div>
+        <h3 style="color:var(--positano)">Positano</h3>
+        <div class="when">Aug 25 → 28 · Cliffside on the Amalfi Coast</div>
+      </div>
+      <span class="nights" style="background:var(--positano)">3 nights</span>
+    </div>
+
+    <div class="block">
+      <div class="block-lbl" style="color:var(--positano)">Where you're staying</div>
+      <div class="card">
+        <div class="title">Private Cliffside Home &amp; Terrace · hosted by Adele</div>
+        <div class="sub">Via Trara Genoino 23, 84017 Positano — in the pedestrian heart of town</div>
+        <div class="kv">
+          <div><div class="k">Dates</div><div class="v">Aug 25 → 28</div></div>
+          <div><div class="k">Confirmation</div><div class="v code">HMQ2XWCBWH</div></div>
+        </div>
+        <div class="flag">
+          <span class="ic">—</span>
+          <div class="body">The house is in a pedestrian-only area — luggage service can be arranged, and indications come after booking. Worth sorting a porter for arrival and departure.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-lbl" style="color:var(--positano)">Booked</div>
+      <div class="card">
+        <div class="title">Ferry to Amalfi, car to Ravello, lunch</div>
+        <div class="sub">Capri → Amalfi → Ravello gardens → on to Positano</div>
+        <div class="kv">
+          <div><div class="k">Date</div><div class="v">Tue, Aug 25 · travel day</div></div>
+        </div>
+        <div class="flag key">
+          <span class="ic">▲</span>
+          <div class="body"><b>Your heaviest travel day, and you have Da Vincenzo at 7:45 PM.</b> Capri checkout, ferry to Amalfi, car up the mountain to Ravello, lunch and the gardens, then back down and on to Positano to check in — all before dinner.
+          <br><br>
+          <b>The luggage is the question.</b> Where do five people's bags go while you're touring Ravello? Ravello is a hilltop town; you don't want to be hauling suitcases through Villa Rufolo. Arrange with the car service to hold the bags in the vehicle, or drop them in Positano first.
+          <br><br>
+          Take the early Capri ferry. If the day slips, Da Vincenzo is the thing that gets squeezed.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title">Dinner at Da Vincenzo</div>
+        <div class="sub">Longstanding family kitchen on Viale Pasitea · 5 guests</div>
+        <div class="kv">
+          <div><div class="k">Date</div><div class="v">Tue, Aug 25, 7:45 PM</div></div>
+        </div>
+        <div class="flag">
+          <span class="ic">—</span>
+          <div class="body"><b>This is your arrival day.</b> You ferry in from Capri, get to the house, and dinner is at 7:45. Comfortable as long as the ferry is a midday-or-earlier crossing — worth keeping in mind when you book that leg.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title">Amalfi Coast — full-day private boat tour</div>
+        <div class="sub">Fratelli Aprea gozzo · private charter</div>
+        <div class="kv">
+          <div><div class="k">Date</div><div class="v">Wed, Aug 26, 9:30 AM – 5:00 PM</div></div>
+          <div><div class="k">Boat</div><div class="v">1 Fratelli Aprea 2</div></div>
+        </div>
+        <div class="flag">
+          <span class="ic">—</span>
+          <div class="body"><b>You have La Tagliata the same evening — shuttle at 7:05 PM.</b> The boat returns at 5:00, which leaves about two hours to get off the water, back up to the house, showered and down to Hotel Poseidon. Workable, but not leisurely after a full day in the sun. Confirm where the boat drops you, and don't plan anything else that afternoon.
+          <br><br>
+          Bring more water and sunscreen than feels necessary — a full day on an open gozzo in late August is a lot of exposure.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title">Dinner at La Tagliata</div>
+        <div class="sub">Family-run hillside restaurant above Positano · 5 people</div>
+        <div class="kv">
+          <div><div class="k">Date</div><div class="v">Wed, Aug 26, 7:30 PM</div></div>
+          <div><div class="k">Shuttle pickup</div><div class="v">7:05 PM, outside Hotel Poseidon</div></div>
+        </div>
+        <div class="flag">
+          <span class="ic">—</span>
+          <div class="body"><b>Be at Hotel Poseidon by 7:00 PM — it's not your front door.</b> The shuttle leaves from the hotel, not the apartment, and Positano is vertical: every walk is stairs and switchbacks. Leave Via Trara Genoino with time to spare rather than jogging up in dinner clothes. The restaurant is up in the hills, so the shuttle is how you get there and back.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title">Da Adolfo — beach club &amp; lunch</div>
+        <div class="sub">Laurito beach, reached by the restaurant's own boat</div>
+        <div class="kv">
+          <div><div class="k">Date</div><div class="v">Thu, Aug 27, 1:00 PM</div></div>
+        </div>
+        <div class="flag">
+          <span class="ic">—</span>
+          <div class="body">Da Adolfo runs a free shuttle boat from Positano's main pier — it's the normal way in, and it stops running in the evening, so plan the return. You have <b>Chez Black at 7:00 PM</b> the same night, which works fine as a lunch-then-dinner day. Just remember the 27th is also your last night, with a ~7:00 AM departure after it — pack before dinner.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title">Dinner at Chez Black</div>
+        <div class="sub">Beachfront on Spiaggia Grande · 5 guests</div>
+        <div class="kv">
+          <div><div class="k">Date</div><div class="v">Thu, Aug 27, 7:00 PM</div></div>
+        </div>
+        <div class="flag">
+          <span class="ic">—</span>
+          <div class="body"><b>This is your last night — and you leave at 7:00 AM.</b> Pack before dinner, not after. It's a walk down to the beachfront and back up afterward, so you'll want bags closed and the porter arranged before you head out.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-lbl" style="color:var(--positano)">If you've got time</div>
+      <div style="font-size:13.5px;color:var(--ink-soft);margin:-4px 0 14px;max-width:560px">The 26th is now the boat all day, and the 25th is an arrival. <b>Aug 27 is your one open day here</b> — if the Path of the Gods is happening, that's when.</div>
+      <ul class="todo">
+        <li>
+          <span class="mark" style="background:var(--positano)">◔</span>
+          <div class="body"><div class="h">Path of the Gods (Sentiero degli Dei)</div>
+          <div class="d">The marquee Amalfi hike — cliffs between sky and sea, with views to Capri. Do it Bomerano → Nocelle → Positano (mostly downhill), ~3 hours, moderate. The one for your group. <span class="hike">moderate · ~3 hrs</span></div></div>
+        </li>
+        <li>
+          <span class="mark" style="background:var(--positano)">◔</span>
+          <div class="body"><div class="h">Spiaggia Grande &amp; Fornillo beach</div>
+          <div class="d">The classic Positano beach shot — and Fornillo, a short walk over, is the calmer of the two. <span class="hike">short walk</span></div></div>
+        </li>
+        <li>
+          <span class="mark" style="background:var(--positano)">◔</span>
+          <div class="body"><div class="h">Santa Maria Assunta</div>
+          <div class="d">The majolica-domed church at the heart of town; the vertical lanes around it are the photo you're picturing.</div></div>
+        </li>
+        <li>
+          <span class="mark" style="background:var(--positano)">◔</span>
+          <div class="body"><div class="h">Ferry day trip: Amalfi &amp; Ravello</div>
+          <div class="d">Ravello's garden terraces (Villa Rufolo / Villa Cimbrone) are the highest, most cinematic views on the whole coast.</div></div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="block">
+      <div class="block-lbl" style="color:var(--positano)">Transport home</div>
+      <div class="transport">
+        <div class="tp"><span class="ic">→</span><div><b>Aug 28 · Positano → Naples Airport (NAP) by car service.</b> ~1.5–2 hrs. Leave ~7:00 AM.</div><span class="tag-todo">to book</span></div>
+      </div>
+      <div class="flag">
+        <span class="ic">—</span>
+        <div class="body"><b>Departure morning is tight — plan an early start.</b> Checkout is 10:00 AM but your flight leaves Naples at noon. For a noon international flight you want to be at NAP by ~9:30 AM, and Positano → NAP is 1.5–2 hours from a pedestrian town where bags must be carried or portered. That means leaving Positano around <b>7:00 AM</b>. A pre-booked early private transfer + a luggage porter removes all the risk — there's no margin otherwise.</div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<!-- ============ NEED TO KNOW ============ -->
+<section class="know" id="know">
+  <div class="wrap">
+    <div class="sec-eyebrow">Before you go</div>
+    <h2>Need to know</h2>
+    <div class="know-grid">
+      <div class="know-card">
+        <div class="h">Passports</div>
+        <div class="p">All five valid at least <b>3 months beyond Aug 28</b>, and names matching tickets exactly. One traveler is named Rome and so is a city — always read carefully so a person and a place don't get crossed.</div>
+      </div>
+      <div class="know-card">
+        <div class="h">Border: EES &amp; ETIAS</div>
+        <div class="p">The EU's biometric entry system (EES) is now live — expect <b>fingerprints &amp; a photo on arrival</b>, so allow extra time at passport control at FCO. ETIAS isn't required yet for these dates, but verify close to departure.</div>
+      </div>
+      <div class="know-card">
+        <div class="h">Trains &amp; ferries</div>
+        <div class="p">Book the high-speed legs and the Amalfi ferries <b>early</b> — late August fills up, and Italian high-speed tickets are tied to a specific departure, so a missed train can mean a lost ticket.</div>
+      </div>
+      <div class="know-card">
+        <div class="h">Timed tickets</div>
+        <div class="p">Museum and monument entries (Uffizi, Accademia, Colosseum) are <b>timed slots</b> — miss the window and you often lose the ticket. Treat them as fixed anchors.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OPEN ITEMS ============ -->
+<section class="open">
+  <div class="wrap">
+    <div class="sec-eyebrow" style="color:var(--gold)">Still coming</div>
+    <h2>What's left to add</h2>
+    <p class="intro">Every night has a bed and every restaurant and activity is confirmed. What's left is the connective tissue — the legs between cities, and a few details worth nailing down before you fly.</p>
+    <ul>
+      <li><span class="box"></span><div><b>Book the six transport legs.</b> <span class="d">Rome airport → Florence (16th) · Florence → Rome train (19th) · car service + Sorrento ferry (23rd) · Capri → Amalfi ferry (25th) · car to Naples airport (28th). August fills up — these are the priority.</span></div></li>
+      <li><span class="box"></span><div><b>Reserve the Ravello lunch.</b> <span class="d">Aug 25, still unnamed. Ravello is small and this is peak season.</span></div></li>
+      <li><span class="box"></span><div><b>Sort the luggage questions.</b> <span class="d">Pompeii won't allow large bags on site (23rd) · where bags sit during Ravello (25th) · porters for Positano arrival and departure.</span></div></li>
+      <li><span class="box"></span><div><b>Pack student IDs.</b> <span class="d">Seven bookings are priced at student rates — operators usually check at the door.</span></div></li>
+      <li><span class="box"></span><div><b>Confirm the small stuff.</b> <span class="d">Florence checkout time (19th) · Capri check-in time and bag transfer from Marina Grande · cooking class address · where the Amalfi boat departs from.</span></div></li>
+      <li><span class="box"></span><div><b>Travel insurance,</b> <span class="d">if you want it — there's a lot prepaid here.</span></div></li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="fr">Cinque viaggiatori, una famiglia, quattro città.</div>
+  Rottura Family · Italy 2026 · a living itinerary — details fill in as bookings arrive
+</footer>
+
+</body>
+</html>
